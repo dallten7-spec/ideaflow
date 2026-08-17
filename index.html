@@ -1,1 +1,80 @@
+Output: <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IdeaFlow AI</title>
+<style>
+  :root{
+    --bg1:#0a0a12; --bg2:#12121f;
+    --glass:rgba(255,255,255,.06);
+    --border:rgba(255,255,255,.12);
+    --text:#eaeaff; --muted:#9a9ab8;
+    --gold1:#f7c948; --gold2:#e0a018;
+    --accent:#8b7bff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif}
+  body{
+    min-height:100vh;color:var(--text);
+    background:radial-gradient(circle at 20% 10%,#1b1b3a 0%,var(--bg1) 45%),var(--bg1);
+    padding:20px;display:flex;flex-direction:column;align-items:center;
+  }
+  .wrap{width:100%;max-width:460px}
 
+  /* Header */
+  header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .logo{width:42px;height:42px;border-radius:12px;
+        background:linear-gradient(135deg,var(--accent),var(--gold1));
+        display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;
+        box-shadow:0 0 25px rgba(139,123,255,.5)}
+  h1{font-size:22px;letter-spacing:.3px}
+  h1 small{display:block;font-size:11px;color:var(--muted);font-weight:400;letter-spacing:2px;text-transform:uppercase}
+
+  /* Input card */
+  .card{background:var(--glass);border:1px solid var(--border);border-radius:20px;
+        padding:18px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+        box-shadow:0 8px 30px rgba(0,0,0,.4)}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:8px;letter-spacing:.5px}
+  .input-row{display:flex;gap:10px}
+  select{
+    flex:1;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text);
+    padding:14px;border-radius:12px;font-size:15px;outline:none;appearance:none;
+  }
+  select option{background:#15152a;color:var(--text)}
+  button.gen{
+    flex:1.2;border:none;border-radius:12px;cursor:pointer;font-size:15px;font-weight:700;color:#1a1200;
+    background:linear-gradient(135deg,var(--gold1),var(--gold2));
+    box-shadow:0 6px 20px rgba(224,160,24,.35);transition:.2s;padding:14px;
+  }
+  button.gen:active{transform:scale(.97)}
+
+  /* Counter */
+  .counter{display:flex;justify-content:space-between;align-items:center;margin:16px 0;font-size:13px;color:var(--muted)}
+  .counter b{color:var(--text)}
+  .bar{height:6px;border-radius:6px;background:rgba(255,255,255,.08);overflow:hidden}
+  .bar span{display:block;height:100%;border-radius:6px;
+            background:linear-gradient(90deg,var(--gold1),var(--gold2));transition:width .4s}
+
+  .status{padding:14px;border-radius:14px;text-align:center;font-size:14px;color:var(--muted);
+          background:var(--glass);border:1px dashed var(--border);margin-top:12px}
+
+  /* Idea cards */
+  .ideas{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+  .idea{background:var(--glass);border:1px solid var(--border);border-radius:16px;padding:16px;
+        backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);animation:pop .35s ease}
+  @keyframes pop{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+  .idea .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+             color:var(--gold1);background:rgba(247,201,72,.12);padding:3px 9px;border-radius:20px;margin-bottom:8px}
+  .idea h3{font-size:15px;margin-bottom:5px}
+  .idea p{font-size:13px;color:var(--muted);line-height:1.5}
+
+  /* Pro */
+  .pro{margin-top:20px;text-align:center;background:linear-gradient(135deg,rgba(247,201,72,.15),rgba(139,123,255,.15));
+       border:1px solid rgba(247,201,72,.35);border-radius:20px;padding:18px}
+  .pro h2{font-size:17px;margin-bottom:6px}
+  .pro p{font-size:13px;color:var(--muted);margin-bottom:12px}
+  button.upgrade{width:100%;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:800;cursor:pointer;
+                 color:#1a1200;background:linear-gradient(135deg,var(--gold1),var(--gold2));
+                 box-shadow:0 
+
+---LEN--- 8099
