@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IdeaFlow AI</title>
+<style>
+  :root{
+    --bg1:#0a0a12; --bg2:#12121f;
+    --glass:rgba(255,255,255,.06);
+    --border:rgba(255,255,255,.12);
+    --text:#eaeaff; --muted:#9a9ab8;
+    --gold1:#f7c948; --gold2:#e0a018;
+    --accent:#8b7bff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif}
+  body{
+    min-height:100vh;color:var(--text);
+    background:radial-gradient(circle at 20% 10%,#1b1b3a 0%,var(--bg1) 45%),var(--bg1);
+    padding:20px;display:flex;flex-direction:column;align-items:center;
+  }
+  .wrap{width:100%;max-width:460px}
+
+  /* Header */
+  header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .logo{width:42px;height:42px;border-radius:12px;
+        background:linear-gradient(135deg,var(--accent),var(--gold1));
+        display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;
+        box-shadow:0 0 25px rgba(139,123,255,.5)}
+  h1{font-size:22px;letter-spacing:.3px}
+  h1 small{display:block;font-size:11px;color:var(--muted);font-weight:400;letter-spacing:2px;text-transform:uppercase}
+
+  /* Input card */
+  .card{background:var(--glass);border:1px solid var(--border);border-radius:20px;
+        padding:18px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+        box-shadow:0 8px 30px rgba(0,0,0,.4)}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:8px;letter-spacing:.5px}
+  .input-row{display:flex;gap:10px}
+  select{
+    flex:1;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text);
+    padding:14px;border-radius:12px;font-size:15px;outline:none;appearance:none;
+  }
+  select option{background:#15152a;color:var(--text)}
+  button.gen{
+    flex:1.2;border:none;border-radius:12px;cursor:pointer;font-size:15px;font-weight:700;color:#1a1200;
+    background:linear-gradient(135deg,var(--gold1),var(--gold2));
+    box-shadow:0 6px 20px rgba(224,160,24,.35);transition:.2s;padding:14px;
+  }
+  button.gen:active{transform:scale(.97)}
+
+  /* Counter */
+  .counter{display:flex;justify-content:space-between;align-items:center;margin:16px 0;font-size:13px;color:var(--muted)}
+  .counter b{color:var(--text)}
+  .bar{height:6px;border-radius:6px;background:rgba(255,255,255,.08);overflow:hidden}
+  .bar span{display:block;height:100%;border-radius:6px;
+            background:linear-gradient(90deg,var(--gold1),var(--gold2));transition:width .4s}
+
+  .status{padding:14px;border-radius:14px;text-align:center;font-size:14px;color:var(--muted);
+          background:var(--glass);border:1px dashed var(--border);margin-top:12px}
+
+  /* Idea cards */
+  .ideas{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+  .idea{background:var(--glass);border:1px solid var(--border);border-radius:16px;padding:16px;
+        backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);animation:pop .35s ease}
+  @keyframes pop{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+  .idea .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+             color:var(--gold1);background:rgba(247,201,72,.12);padding:3px 9px;border-radius:20px;margin-bottom:8px}
+  .idea h3{font-size:15px;margin-bottom:5px}
+  .idea p{font-size:13px;color:var(--muted);line-height:1.5}
+
+  /* Pro */
+  .pro{margin-top:20px;text-align:center;background:linear-gradient(135deg,rgba(247,201,72,.15),rgba(139,123,255,.15));
+       border:1px solid rgba(247,201,72,.35);border-radius:20px;padding:18px}
+  .pro h2{font-size:17px;margin-bottom:6px}
+  .pro p{font-size:13px;color:var(--muted);margin-bottom:12px}
+  button.upgrade{width:100%;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:800;cursor:pointer;
+                 color:#1a1200;background:linear-gradient(135deg,var(--gold1),var(--gold2));
+                 box-shadow:0 6px 22px rgba(224,160,24,.4)}
+  footer{margin-top:20px;font-size:11px;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">⚡</div>
+    <h1>IdeaFlow<small>AI</small></h1>
+  </header>
+
+  <div class="card">
+    <label>Choose your niche</label>
+    <div class="input-row">
+      <select id="niche">
+        <option value="Cooking">🍳 Cooking</option>
+        <option value="Tech">💻 Tech</option>
+        <option value="Fashion">👗 Fashion</option>
+      </select>
+      <button class="gen" onclick="generate()">Generate Ideas ✨</button>
+    </div>
+  </div>
+
+  <div class="counter">
+    <span>Free ideas today</span>
+    <span><b id="used">0</b>/<b>3</b></span>
+  </div>
+  <div class="bar"><span id="bar" style="width:0%"></span></div>
+
+  <div class="status" id="status">Pick a niche and hit Generate. You get 3 free ideas daily.</div>
+
+  <div class="ideas" id="ideas"></div>
+
+  <div class="pro" id="proCard" style="display:none">
+    <h2>Upgrade to Pro 👑</h2>
+    <p>Unlimited ideas + smarter, tailored suggestions. No daily limits.</p>
+    <button class="upgrade" onclick="alert('Pro payment flow will connect here 🔒')">Upgrade to Pro</button>
+  </div>
+
+  <footer>IdeaFlow AI · Free forever for everyone ❤</footer>
+</div>
+
+<script>
+// Idea bank (local demo generator — swap with real AI API later)
+const BANK = {
+  Cooking:[
+    {t:"5-Minute Sheet-Pan Dinner",d:"One-pan meal ideas for busy weeknights using 6 ingredients or less."},
+    {t:"Global Street-Food Remix",d:"Take a classic street snack and give it a local, healthy twist."},
+    {t:"Zero-Waste Kitchen Challenge",d:"A weekly series turning leftovers into gourmet recipes."},
+    {t:"Comfort Food, Lighter",d:"Healthy versions of nostalgic comfort dishes people love."},
+    {t:"Cook With What You Have",d:"Generate a recipe from 3 random fridge ingredients."}
+  ],
+  Tech:[
+    {t:"AI Tool of the Week",d:"Break down one practical AI tool with real use cases for beginners."},
+    {t:"App in 5 Minutes",d:"Quick no-code tutorials that build something small and useful."},
+    {t:"Tech Myths Debunked",d:"Dispel common tech misconceptions with clear explanations."},
+    {t:"Beginner's Guide Series",d:"Step-by-step explainers for one confusing tech topic at a time."},
+    {t:"Tool Comparison",d:"Side-by-side comparison of two similar apps with a clear verdict."}
+  ],
+  Fashion:[
+    {t:"Capsule Wardrobe Basics",d:"Build a versatile 10-piece wardrobe for any season."},
+    {t:"Thrift Flip Ideas",d:"Transform cheap second-hand finds into trendy outfits."},
+    {t:"Style for Your Body Type",d:"Flattering outfit formulas tailored to different shapes."},
+    {t:"Minimalist Accessories",d:"How a few key pieces elevate an everyday look."},
+    {t:"Seasonal Color Palette",d:"Color combinations that refresh your wardrobe each season."}
+  ]
+};
+
+const KEY="ideaflow_free_" + new Date().toDateString(); // resets daily
+function getUsed(){return parseInt(localStorage.getItem(KEY)||"0")}
+function setUsed(n){localStorage.setItem(KEY,n);updateCounter()}
+function updateCounter(){
+  const u=getUsed();
+  document.getElementById("used").textContent=u;
+  document.getElementById("bar").style.width=(u/3*100)+"%";
+  document.getElementById("proCard").style.display = u>=3 ? "block":"none";
+  document.getElementById("status").innerHTML = u>=3
+    ? "You've used all free ideas today. Come back tomorrow or go Pro! 👑"
+    : (3-u)+" free idea"+(3-u>1?"s":"")+" remaining today.";
+}
+
+function generate(){
+  const u=getUsed();
+  if(u>=3){document.getElementById("status").innerHTML="🚫 Limit reached. Upgrade to Pro for unlimited ideas.";return}
+  const niche=document.getElementById("niche").value;
+  const list=BANK[niche]||BANK.Cooking;
+  const idx=(u + Math.floor(Math.random()*list.length))%list.length;
+  const idea=list[idx];
+  const box=document.getElementById("ideas");
+  box.innerHTML=`<div class="idea">
+      <span class="tag">${niche}</span>
+      <h3>${idea.t}</h3>
+      <p>${idea.d}</p>
+    </div>`+box.innerHTML;
+  setUsed(u+1);
+}
+updateCounter();
+</script>
+</body>
+</html>
